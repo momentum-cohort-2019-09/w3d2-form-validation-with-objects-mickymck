@@ -1,4 +1,4 @@
-console.log('Add validation!')
+// console.log('Add validation!')
 
 function query(selector) {
     return document.querySelector(selector)
@@ -8,103 +8,85 @@ function querys(selector) {
     return document.querySelectorAll(selector)
 }
 
-class Form {
-    constructor(fieldDescription) {
-        this.nameField = nameField
-        this.carField = carField
-        this.dateField = dateField
-        this.daysField = daysField
-        this.creditCardField = creditCardField
-        this.cvvField = cvvField
-        this.expirationField = expirationField;
+class Validator {
+    constructor(test, errorMsg) {
+        this.test = test
+        this.errorMsg = errorMsg
     }
 
-    markValid () {
-        this.field.classList.remove("input-invalid")
-        this.field.classList.add("input-valid")
+    validate (trueOrFalse) {
+        return this.test (trueOrFalse)
     }
-
-    markInvalid () {
-        this.field.classList.remove("input-valid")
-        this.field.classList.add("input-invalid")
-
-        const errorField = document.createElement("p")
-        errorField.classList.add("input-hint", "text-danger", "error-message")
-        errorField.innerText = "invalid"
-        this.field.appendChild(errorField)
-    }
-
-    // calculate total
 }
 
 class Field {
-    constructor(input) {
+    constructor(fieldDiv, input) {
+        this.fieldDiv = fieldDiv
         this.input = input;
     }
 
-    fieldIsNotEmpty() {
-        return this.input !== ""
+    markValid() {
+        this.fieldDiv.classList.remove("input-invalid")
+        this.fieldDiv.classList.add("input-valid")
     }
 
-    isNumber() {
-        return !isNaN(this.input)
+    markInvalid() {
+        this.fieldDiv.classList.remove("input-valid")
+        this.fieldDiv.classList.add("input-invalid")
     }
 
-    isCVV() {
-        return this.input.length === 3
-    }
 
-    isFutureDate() {
-        let now = new Date()
-        now.setUTCHours(0, 0, 0, 0)
-        let parkDate = new Date(this.date)
-        parkDate.setUTCHours(0, 0, 0, 0)
-        return parkDate >= now
-    }
 }
+
+    // mark each field as valid
+
+    // provide a total for the user, based on the date and days fields
 
 query("#parking-form").addEventListener("submit", function (event) {
     event.preventDefault()
 
-    let nameField = new Field(query("#name").value)
+    let name = new Field(query("#name-field"), query("#name").value)
 
-    let carField = new Field(query("#car-info").value)
+    let car = new Field(query("#name-field"), query("#car-info").value)
 
-    let dateField = new Field(query("#start-date").value)
+    let date = new Field(query("#name-field"), query("#start-date").value)
 
-    let daysField = new Field(query("#days").value)
+    let days = new Field(query("#name-field"), query("#days").value)
 
-    let creditCardField = new Field(query("#credit-card").value)
+    let creditCard = new Field(query("#name-field"), query("#credit-card").value)
 
-    let cvvField = new Field(query("#cvv").value)
+    let cvv = new Field(query("#name-field"), query("#cvv").value)
 
-    let expirationField = new Field(query("#expiration").value)
+    let expiration = new Field(query("#name-field"), query("#expiration").value)
 
-    if (nameField.fieldIsNotEmpty()) {
-        nameField.markValid ()
-    } else {
-        nameField.markInvalid ()
-    }
+    console.group(name.fieldIsNotEmpty())
 
-    carField.fieldIsNotEmpty()
+    car.fieldIsNotEmpty()
 
-    dateField.fieldIsNotEmpty()
+    date.fieldIsNotEmpty()
 
-    daysField.fieldIsNotEmpty()
+    days.fieldIsNotEmpty()
 
-    creditCardField.fieldIsNotEmpty()
+    creditCard.fieldIsNotEmpty()
 
-    cvvField.fieldIsNotEmpty()
+    cvv.fieldIsNotEmpty()
 
-    expirationField.fieldIsNotEmpty()
+    expiration.fieldIsNotEmpty()
 
-    dateField.isFutureDate()
+    // date.isFutureDate()
 
-    daysField.isNumber()
+    days.isNumber()
 
-    cvvField.isNumber()
+    cvv.isNumber()
 
-    cvvField.isCVV()
+    cvv.isCVV()
 
 })
 
+let fieldIsNotEmpty = new Validator ( , "this field must not be empty")
+
+let isNumber = new Validator ( , "this field must be a number")
+
+let isCVV = new Validator ( , "CVV must be 3 digits")
+
+let isFutureDate = new Validator ( , "date must not be in the past")
