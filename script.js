@@ -1,5 +1,3 @@
-// console.log('Add validation!')
-
 function query(selector) {
     return document.querySelector(selector)
 }
@@ -14,8 +12,8 @@ class Validator {
         this.errorMsg = errorMsg
     }
 
-    validate (value) {
-        return this.test (value)
+    validate(value) {
+        return this.test(value)
     }
 }
 
@@ -25,29 +23,32 @@ class Field {
         this.validations = validations || [];
     }
 
+    markValid() {
+        this.inputDiv.classList.remove("input-invalid")
+        this.inputDiv.classList.add("input-valid")
+    }
+
+    markInvalid() {
+        this.inputDiv.classList.remove("input-valid")
+        this.inputDiv.classList.add("input-invalid")
+    }
+
     theBigGetter() {
-        let input = query("#name")
+        let input = this.inputDiv.querySelector("input")
         let value = input.value
         return value
     }
 
-    validateField () {
+    validateField() {
         const value = this.theBigGetter()
-        let errorMsgs = []
-        for (let validation of validations) {
-            
+        for (let validation of this.validations) {
+            if (!validation.validate(value)) {
+                this.markInvalid()
+            } else {
+                this.markValid()
+            }
         }
     }
-
-    // markValid() {
-    //     this.fieldDiv.classList.remove("input-invalid")
-    //     this.fieldDiv.classList.add("input-valid")
-    // }
-
-    // markInvalid() {
-    //     this.fieldDiv.classList.remove("input-valid")
-    //     this.fieldDiv.classList.add("input-invalid")
-    // }
 
     // mark each field as valid
 
@@ -62,21 +63,21 @@ let fieldIsNotEmpty = new Validator(input => !!input, "this field must not be em
 
 let name = new Field(query("#name-field"), [fieldIsNotEmpty])
 
-// let car = new Field(query("#car-field"), [fieldIsNotEmpty])
+let car = new Field(query("#car-info-field"), [fieldIsNotEmpty])
 
-// let date = new Field(query("#date-field"), [fieldIsNotEmpty])
+let date = new Field(query("#start-date-field"), [fieldIsNotEmpty])
 
-// let days = new Field(query("#days-field"), [fieldIsNotEmpty])
+let days = new Field(query("#days-field"), [fieldIsNotEmpty])
 
-// let creditCard = new Field(query("#creditCard-field"), [fieldIsNotEmpty])
+let creditCard = new Field(query("#credit-card-field"), [fieldIsNotEmpty])
 
-// let cvv = new Field(query("#cvv-field"), [fieldIsNotEmpty])
+let cvv = new Field(query("#cvv-field"), [fieldIsNotEmpty])
 
-// let expiration = new Field(query("#expiration-field"), [fieldIsNotEmpty])
+let expiration = new Field(query("#expiration-field"), [fieldIsNotEmpty])
 
 
 
-query("#parking-form").addEventListener("submit", function (event) {
+query("#parking-form").addEventListener("submit", (event) => {
     event.preventDefault()
 })
 
